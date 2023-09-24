@@ -18,10 +18,11 @@ const assignedItems = document.querySelector(".assigned-items");
 addGuestButton.addEventListener("click", function () {
     const guest = guestInput.value;
     //console.log(guest);
-    if (guest !== "")
+    if (guest !== "") {
         addToList(guest);
-    updateGuestCount();
-    clearInput();
+        updateGuestCount();
+        clearInput();
+    }
 });
 
 const clearInput = function () {
@@ -37,6 +38,7 @@ const addToList = function (guest) {
 const updateGuestCount = function () {
     const guests = document.querySelectorAll(".guest-list li");
     guestCount.innerText = guests.length;
+
     if (guests.length === 8) {
         addGuestButton.classList.add("hide");
         guestInput.classList.add("hide");
@@ -46,15 +48,35 @@ const updateGuestCount = function () {
 };
 
 const assignItems = function () {
-    const potluckItems = ["hummus", "3-cheese tomato tart", "3-bean salad", "pasta salad", "potato salad", "fruit salad", "cookies", "lemon pound cake", "caprese skewers", "stuffed peppadews", "cheesecake"];
-    const allGuests = document.querySelectorAll("guest-list li");
+    const potluckItems = [
+        "hummus",
+        "3-cheese tomato tart",
+        "3-bean salad",
+        "pasta salad",
+        "potato salad",
+        "fruit salad",
+        "cookies",
+        "lemon pound cake",
+        "caprese skewers",
+        "stuffed peppadews",
+        "cheesecake"
+    ];
+
+    const allGuests = document.querySelectorAll(".guest-list li");
+
+    for (let guest of allGuests) {
+        let randomPotluckIndex = Math.floor(Math.random() * potluckItems.length);
+        let randomPotluckItem = potluckItems[randomPotluckIndex];
+
+        let listItem = document.createElement("li");
+        listItem.innerText = `${guest.innerText} is bringing ${randomPotluckItem}.`;
+        assignedItems.append(listItem);
+
+        potluckItems.splice(randomPotluckIndex, 1);
+    }
 };
 
-for (let guest of allGuests) {
-    let randomPotluckIndex = Math.floor(Math.random() * potluckItems.length);
-    let randomPotluckItem = potluckItems[randomPotluckIndex];
-
-    let listItem = document.createElement("li");
-    listItem.innerText = `${guest.innerText} is bringing ${randomPotluckItem}.`;
-    assignedItems.append("listItem");
-};
+assignButton.addEventListener("click", function () {
+    assignItems();
+    assignButton.disabled = true;
+});
